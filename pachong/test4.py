@@ -1,14 +1,10 @@
+# coding=utf-8
+# 爬个校园网信息
 import requests
+from bs4 import BeautifulSoup, UnicodeDammit
 
-response = requests.get("https://www.baidu.com")
-print(type(response))
-print(response.status_code)
-print(type(response.text))
-
-response.enconding = ['utf-8']
-print(response.text)
-
-print(response.cookies)
-
-print(response.content)
-print(response.content.decode("utf-8"))
+res = requests.get("http://172.16.6.3")
+soup = BeautifulSoup(res.content, 'html.parser')
+kk = soup.find('script').text
+print "使用时间", kk[12:20]
+print "使用流量", str(int(kk[30:39]) / 1024) + '.' + str(int(float(kk[30:39]) % 1024)), "MB"
