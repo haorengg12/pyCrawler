@@ -1,5 +1,5 @@
 # coding=utf-8
-# 爬个校园网信息
+# 校园网信息
 import requests
 from bs4 import BeautifulSoup, UnicodeDammit
 

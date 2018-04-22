@@ -4,6 +4,9 @@ import os
 
 import requests
 
+proxies = {'http': 'socks5://127.0.0.1:1080', 'https': 'socks5://127.0.0.1:1080'}
+url = 'http://mat1.gtimg.com/www/images/qq2012/qzoneIcon.png'
+
 
 def testPath(tpath, tmode):  # 测试文件读写权限
     print os.access(tpath, tmode)  # os.access('C:/Users/ASUS/untitled2/kk', os.R_OK)
@@ -11,8 +14,8 @@ def testPath(tpath, tmode):  # 测试文件读写权限
 
 def testDown(path):  # 测试是否能下载到指定目录
     print 'start'
-    res = requests.get('https://repo.continuum.io/archive/Anaconda3-5.1.0-Windows-x86_64.exe',{'http': 'socks5://127.0.0.1:1080', 'https': 'socks5://127.0.0.1:1080'})
-    with open(path + '/kk.exe', 'wb') as f:
+    res = requests.get(url=url, proxies=proxies)  # 只有这种格式 可以引用代理
+    with open(path + '/test.png', 'wb') as f:
         f.write(res.content)
         f.close()
         print 'done\n'
@@ -26,6 +29,5 @@ if __name__ == '__main__':
     path1 = 'C:/Users/ASUS/untitled2/kk'
     path2 = 'D:/kk'
     testPath(path1, mode1)
-    # testPath(path2, mode1)
     testPath(path1, mode4)
     testDown(path1)
