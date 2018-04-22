@@ -10,7 +10,7 @@ from faker import Factory
 fake = Factory.create()
 luoo_site = 'http://www.luoo.net/music/%s'  # 文章地址模板
 luoo_site_mp3 = 'http://mp3-cdn2.luoo.net/low/luoo/radio%s/%s.mp3'  # 音乐文件的源模板
-local_file = 'C:/Users/ASUS/untitled2/kk/%s.mp3'  # 本地文件名模板
+local_file = '../music/%s'  # 本地文件名模板
 
 proxies = {'http': 'socks5://127.0.0.1:1080', 'https': 'socks5://127.0.0.1:1080'}  # 设置代理，需要安装
 headers = {
@@ -26,18 +26,20 @@ def linkstart(link_num):
 
 
 def download(num, tracknames, link_num):  # 下载
-    # TODO:多线程下载,顺便如果没有文件夹，新建文件夹
-    print "Start download ! "
+    # TODO:多线程下载
+    print "Start download !",
     for i in range(num):
-        print "Download",track_names[i].text
-        path = tra(tracknames[i].text)  # 修改文件名
+        print "Download", track_names[i].text
+        path = tra(tracknames[i].text, link_num)  # 修改文件名
         link = llink(track_names[i].text, link_num)  # 合成link
         res = requests.get(link, proxies=proxies, headers=headers)
         with open(path, 'wb') as f:  # 写入文件
+            #FIXME:文件名不能包含以下字符\/:*?"<>|否则创建失败
             f.write(res.content)
             f.close()
+            print 'done !'
 
-    print 'Download finish !\n'
+    print 'Download finish !'
     exit(0)
 
 
@@ -47,13 +49,17 @@ def llink(track_name, link_num):  # make the download link
     return link
 
 
-def tra(track_name):  # make local path
+def tra(track_name, num):  # make local path
     # intab = "a"
     # outtab = "a"
     # trantab = maketrans(intab, outtab)
-    # track_link = str(luoo_site_mp3 % (link_num, track_name4)).translate(trantab, ' ')
-    path = local_file % (track_name)
-    return path
+    # track_link = str(luoo_site_mp3 % (link_num, track_name4)).translate(trantab, ' ')#去掉空格
+    while (os.access(local_file % (''), os.F_OK) == False):
+        os.makedirs(local_file % (''))
+    path = local_file % (num + '/')
+    while (os.access(path, os.F_OK) == False):
+        os.makedirs(path)  # 如果没有目录自动创建
+    return path + track_name + '.mp3'
 
 
 if __name__ == '__main__':

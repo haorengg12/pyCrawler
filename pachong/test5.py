@@ -23,8 +23,7 @@ if __name__ == '__main__':
     mode2 = os.R_OK  # 测试path是否可读
     mode3 = os.W_OK  # 测试path是否可写
     mode4 = os.X_OK  # 测试path是否可执行
-    path1 = 'C:/Users/ASUS/untitled2/kk'
-    path2 = 'D:/kk'
+    path1 = '../kk'
     testPath(path1, mode1)
     # testPath(path2, mode1)
     testPath(path1, mode4)
